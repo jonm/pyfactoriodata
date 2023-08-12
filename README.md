@@ -6,20 +6,42 @@ Python libraries that can be used for further scripting.
 
 # Prerequisites
 
-1. You'll need [`awk`](https://en.wikipedia.org/wiki/AWK#:~:text=AWK%20(awk%20%2F%C9%94%CB%90k%2F,most%20Unix%2Dlike%20operating%20systems.) for the script to convert the raw data extract into a self-exporting
-Lua script.
-2. You'll need a [lua](https://www.lua.org/) interpreter available to run the self-export script
-  and produce JSON output.
-3. You'll need [`python3`](https://www.python.org/) and [`pip3`](https://pypi.org/project/pip/) to
-  run the remainder of the generation scripts.
+1. `make`
+2. `awk`
+3. `lua`
+4. `python3`
+5. `pip3`
+6. `virtualenv` (on my system this was a system package called
+   `python3.10-venv`)
 
-Instructions for installing the above are highly system dependent, but they are available
-for many platforms. Releases of this package will also include the resulting JSON output from the
-first two steps, so if that works for you, you can skip them.
+Then you can:
+```
+$ virtualenv -p python3 venv
+$ source venv/bin/activate
+$ pip3 install -r requirements.txt .
+```
 
 # Instructions
 
-If you want to start all the way from the beginning, download the raw data export, and call this
-`data.raw`.
+If you want to start all the way from the beginning, download the raw
+data export, and call this `data.raw`. Then, run `make`. This will:
 
-Next, convert this into a self-exporting Lua script by running:
+1. Convert `data.raw` into `data.lua`, a Lua script that can export the
+   raw data as JSON. There are various cleanup activities that must be
+   done to accomplish this successfully, including:
+   * Substituting `inf` or `-inf` into numbers that are valid JSON.
+   * Turning sparse arrays into dictionaries/tables keyed by the string
+     representations of the original integer array indices.
+   * Converting mixed tables (i.e. ones that have keys that suggest they
+     can be treated as Lua arrays as well as keys (usually strings) for
+     other properties.
+   Details of the cleanup operations are in `util.lua`.
+
+2. Run `data.lua` to output `data.json`.
+
+3. Run `generate.py` to create the hardcoded instances/constants of various
+   Python classes.
+
+4. Run `python3 -m build` to produce the distributable Python packages.
+
+

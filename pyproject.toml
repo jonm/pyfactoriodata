@@ -1,0 +1,12 @@
+[project]
+name = "pyfactoriodata"
+version = "1.1.65a1"
+dependencies = []
+
+[tool.setuptools]
+packages = ["pyfactoriodata"]
+include-package-data = true
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
