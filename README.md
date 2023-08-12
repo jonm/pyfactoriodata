@@ -35,6 +35,7 @@ data export, and call this `data.raw`. Then, run `make`. This will:
    * Converting mixed tables (i.e. ones that have keys that suggest they
      can be treated as Lua arrays as well as keys (usually strings) for
      other properties.
+   
    Details of the cleanup operations are in `util.lua`.
 
 2. Run `data.lua` to output `data.json`.
