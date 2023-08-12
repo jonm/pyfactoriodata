@@ -24,7 +24,8 @@ $ pip3 install -r requirements.txt .
 # Instructions
 
 If you want to start all the way from the beginning, download the raw
-data export, and call this `data.raw`. Then, run `make`. This will:
+data export from the link at the top of this file, and call this `data.raw`.
+Then, run `make`. This will:
 
 1. Convert `data.raw` into `data.lua`, a Lua script that can export the
    raw data as JSON. There are various cleanup activities that must be
