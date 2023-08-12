@@ -28,20 +28,19 @@ data export, and call this `data.raw`. Then, run `make`. This will:
 
 1. Convert `data.raw` into `data.lua`, a Lua script that can export the
    raw data as JSON. There are various cleanup activities that must be
-   done to accomplish this successfully, including:
+   done to accomplish this successfully, most of which are in `util.lua`,
+   including:
    * Substituting `inf` or `-inf` into numbers that are valid JSON.
    * Turning sparse arrays into dictionaries/tables keyed by the string
      representations of the original integer array indices.
    * Converting mixed tables (i.e. ones that have keys that suggest they
      can be treated as Lua arrays as well as keys (usually strings) for
      other properties.
-   
-   Details of the cleanup operations are in `util.lua`.
 
 2. Run `data.lua` to output `data.json`.
 
 3. Run `generate.py` to create the hardcoded instances/constants of various
-   Python classes.
+   Python classes. [WIP]
 
 4. Run `python3 -m build` to produce the distributable Python packages.
 
