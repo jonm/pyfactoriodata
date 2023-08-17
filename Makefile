@@ -1,7 +1,7 @@
 VERSION = 1.1.65a1
 WHEEL = dist/pyfactoriodata-$(VERSION)-py3-none-any.whl
 
-all: $(WHEEL)
+all: check $(WHEEL)
 
 data.lua: data.raw raw-to-export.awk
 	awk -f raw-to-export.awk < data.raw > data.lua
@@ -15,6 +15,9 @@ $(WHEEL): pyfactoriodata/__init__.py pyfactoriodata/data.json
 clean:
 	rm -f data.lua pyfactoriodata/data.json
 	rm -fr dist/* build/lib
+
+check:
+	(cd pyfactoriodata; python3 -m unittest discover)
 
 distclean: clean
 	rm -fr dist build pyfactorio.egg-info
