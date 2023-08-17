@@ -9,17 +9,17 @@ class TestRecipe(unittest.TestCase):
 
     def _make_recipe(self,
                      name = "a-recipe",
-                     results = { Item("item1") : 1 },
-                     ingredients = { Item("item2") : 2 },
+                     results = { Item("item1",100) : 1 },
+                     ingredients = { Item("item2",100) : 2 },
                      crafting_time_secs = 1.0,
-                     crafted_only_in = Item("item3"),
+                     crafted_only_in = Item("item3",100),
                      enabled_by = Technology("tech1", 1, 1, {}),
                      expensive_version = Recipe(
                          name = "a-recipe",
-                         results = { Item("item1") : 1 },
-                         ingredients = { Item("item2") : 4 },
+                         results = { Item("item1",100) : 1 },
+                         ingredients = { Item("item2",100) : 4 },
                          crafting_time_secs = 2.0,
-                         crafted_only_in = Item("item3"),
+                         crafted_only_in = Item("item3",100),
                          enabled_by = Technology("tech1", 1, 1, {}))):
         return Recipe(
             name = name,
@@ -49,9 +49,9 @@ class TestRecipe(unittest.TestCase):
         self.assertFalse(r == r2)
 
     def test_notequal_results(self):
-        r = self._make_recipe(results = { Item("foo") : 1 })
-        r2 = self._make_recipe(results = { Item("foo") : 3 })
-        r3 = self._make_recipe(results = { Item("bar") : 1 })
+        r = self._make_recipe(results = { Item("foo",100) : 1 })
+        r2 = self._make_recipe(results = { Item("foo",100) : 3 })
+        r3 = self._make_recipe(results = { Item("bar",100) : 1 })
         self.assertTrue(r != r2)
         self.assertFalse(r == r2)
         self.assertTrue(r != r3)
@@ -60,9 +60,9 @@ class TestRecipe(unittest.TestCase):
         self.assertFalse(r2 == r3)
 
     def test_notequal_ingredients(self):
-        r = self._make_recipe(ingredients = { Item("foo") : 1 })
-        r2 = self._make_recipe(ingredients = { Item("foo") : 3 })
-        r3 = self._make_recipe(ingredients = { Item("bar") : 1 })
+        r = self._make_recipe(ingredients = { Item("foo",100) : 1 })
+        r2 = self._make_recipe(ingredients = { Item("foo",100) : 3 })
+        r3 = self._make_recipe(ingredients = { Item("bar",100) : 1 })
         self.assertTrue(r != r2)
         self.assertFalse(r == r2)
         self.assertTrue(r != r3)
@@ -78,8 +78,8 @@ class TestRecipe(unittest.TestCase):
 
     def test_notequal_crafted_only_in(self):
         r = self._make_recipe(crafted_only_in = None)
-        r2 = self._make_recipe(crafted_only_in = Item("foo"))
-        r3 = self._make_recipe(crafted_only_in = Item("bar"))
+        r2 = self._make_recipe(crafted_only_in = Item("foo",100))
+        r3 = self._make_recipe(crafted_only_in = Item("bar",100))
         self.assertTrue(r != r2)
         self.assertFalse(r == r2)
         self.assertTrue(r != r3)

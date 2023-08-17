@@ -55,7 +55,7 @@ class TestTechnology(unittest.TestCase):
 
     def test_notequal_ingredients(self):
         t = Technology("foo",1,2,{},[])
-        t2 = Technology("foo",1,2,{Item("item") : 1},[])
+        t2 = Technology("foo",1,2,{Item("item",100) : 1},[])
         self.assertTrue(t != t2)
         self.assertFalse(t == t2)
 
