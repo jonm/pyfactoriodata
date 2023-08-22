@@ -7,7 +7,7 @@ class Fluid(Ingredient, Product):
     """Represents liquid elements in the game (water, oil, etc.)."""
     def __init__(self, name: str,
                  default_temperature: int,
-                 heat_capacity_kJ : float,
+                 heat_capacity_kJ : float = None,
                  max_temperature: int = None,
                  gas_temperature: int = None) -> None:
         self.name = name
