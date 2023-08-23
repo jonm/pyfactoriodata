@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import graphlib
 import json
 import re
 import sys
@@ -8,6 +9,7 @@ import typing
 
 from pyfactoriodata.fluid import Fluid
 from pyfactoriodata.item import Item
+from pyfactoriodata.technology import Technology
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -26,6 +28,7 @@ import typing
 
 from .fluid import Fluid
 from .item import Item
+from .technology import Technology
 """)
     outf.write('\n')
 
@@ -137,16 +140,41 @@ def generate_fluid(outf, obj):
 def generate_fluids(json_data, outf):
     outf.write("""
 # fluids
-FLUIDS = {}
+FLUIDS : dict[str,Fluid] = {}
 """)
     for obj in json_data['fluid'].values():
         generate_fluid(outf, obj)
+
+def generate_technologies(json_data, outf):
+    outf.write("""
+# technologies
+TECHNOLOGIES : dict[str,Technology] = {}
+""")
+    # topological sort on prereqs
+    graph = {}
+    for k,v in json_data['technology'].items():
+        for prereq in v.get('prerequisites',[]):
+            if k not in graph: graph[k] = set()
+            graph[k].add(prereq)
+    for name in tuple(graphlib.TopologicalSorter(graph).static_order()):
+        obj = json_data['technology'][name]
+        cost_count = obj['unit'].get('count')
+        cycle_time_secs = obj['unit']['time']
+        outf.write(f"TECHNOLOGIES[{name.__repr__()}] = Technology(name={name.__repr__()},cost_count={cost_count.__repr__()},cycle_time_secs={cycle_time_secs.__repr__()},")
+        outf.write("ingredients={")
+        outf.write(", ".join([
+            f"ITEMS[{i.__repr__()}] : {n}" for i,n in obj['unit']['ingredients']]))
+        outf.write("},prerequisites=[")
+        outf.write(", ".join([
+            f"TECHNOLOGIES[{p.__repr__()}]" for p in obj.get('prerequisites',[])]))
+        outf.write("])\n")
         
 def generate(json_data, outf):
     generate_preamble(outf)
     generate_items(json_data, outf)
     generate_item_aliases(outf)
     generate_fluids(json_data, outf)
+    generate_technologies(json_data, outf)
 
 def main():
     args = parse_args()
