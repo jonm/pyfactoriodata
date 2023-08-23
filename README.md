@@ -18,7 +18,7 @@ Then you can:
 ```
 $ virtualenv -p python3 venv
 $ source venv/bin/activate
-$ pip3 install -r requirements.txt .
+(venv) $ pip3 install -r requirements.txt .
 ```
 
 # Instructions
@@ -40,8 +40,9 @@ Then, run `make`. This will:
 
 2. Run `data.lua` to output `data.json`.
 
-3. Run `generate.py` to create the hardcoded instances/constants of various
-   Python classes. [WIP]
+3. Run `generate.py` on `data.json` to create the hardcoded
+   instances/constants of various Python classes as the `__init__.py` for
+   the Python module we'll package.
 
 4. Run `python3 -m build` to produce the distributable Python packages.
 
