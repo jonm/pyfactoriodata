@@ -4,6 +4,9 @@ from ingredient import Ingredient
 
 class Technology:
     """Represents a research goal in the game."""
+    # TODO: cost_count only represents non-infinite research; the raw data
+    # has formulas for calculating the cost of a given level of an
+    # infinite research tech
     def __init__(self, name: str, cost_count: int, cycle_time_secs: int,
                  ingredients: dict[Ingredient, int],
                  prerequisites: list['Technology'] = []) -> None:

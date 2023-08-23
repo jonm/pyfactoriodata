@@ -69,6 +69,8 @@ def generate_items(json_data, outf):
             outf.write(f"ITEMS[{name.__repr__()}] = {i.__repr__()}\n")
 
 def generate_item_aliases(outf):
+    """These are alternative names for various items, as used by
+    the community in various forums/media."""
     ALIASES : dict[str,str] = {
         'active-provider-chest' : 'logistic-chest-active-provider',
         'am1' : 'assembling-machine-1',
@@ -150,12 +152,18 @@ def generate_technologies(json_data, outf):
 # technologies
 TECHNOLOGIES : dict[str,Technology] = {}
 """)
-    # topological sort on prereqs
+    # topological sort on prereqs; represent the graph as prereqs
+    # pointing to the techs they enable, so the prereqs sort "before"
+    # them in the resulting order. We want to do this so that we can
+    # keep singleton Technology instances in the generated TECHNOLOGIES
+    # dict, with later techs pointing to their already-generated
+    # prerequisites.
     graph = {}
     for k,v in json_data['technology'].items():
         for prereq in v.get('prerequisites',[]):
             if k not in graph: graph[k] = set()
             graph[k].add(prereq)
+            
     for name in tuple(graphlib.TopologicalSorter(graph).static_order()):
         obj = json_data['technology'][name]
         cost_count = obj['unit'].get('count')
